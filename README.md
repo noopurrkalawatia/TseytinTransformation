@@ -24,7 +24,7 @@ The gates supported by .bench file and supported by the tool are,
 Zip and download the code. From the source folder invoke a terminal.
 In the cmd type,
 ```
-make all.
+make all
 ```
 
 Copy your .bench file in to the folder containing the source files run the command,
