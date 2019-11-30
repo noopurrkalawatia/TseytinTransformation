@@ -29,5 +29,5 @@ make all.
 
 Copy your .bench file in to the folder containing the source files run the command,
 ```
-> ./tseytinTransform <*.bench>
+./tseytinTransform <*.bench>
 ```
