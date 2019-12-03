@@ -32,11 +32,13 @@ class tseytinUtil
     unordered_map<string,int> lookupInputOutput;
     vector<vector<string> > processedBenchLines;
     vector<int> outputIndices;
+    vector<int> inputIndices;
     int noOfVariables;
     int noOfClausesInCNF;
     fileOperationsUtil *fileOperationOB;
     void formLookUpTable(string filename);
-    void resolveOutputIndices(string &firstAppend);
+    void resolveInputIndices(string &firstAppend);
+    vector<string> resolveOutputClauses();
     void resolveClauses();
     vector<string> preProcessInputLines(string &line);
 
