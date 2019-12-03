@@ -164,9 +164,11 @@ void tseytinUtil::resolveClauses()
         }
     }
     noOfClausesInCNF = noOfClauses;
+    noOfClausesInCNF += outputIndices.size();
 
-    resolveOutputIndices(firstAppend);
-    fileOperationOB->writeToCNFFile(CNFlines,noOfVariables,noOfClausesInCNF,firstAppend);
+    resolveInputIndices(firstAppend);
+    vector<string> outputClauses = resolveOutputClauses();
+    fileOperationOB->writeToCNFFile(CNFlines,noOfVariables,noOfClausesInCNF,firstAppend,outputClauses);
 }
 
 /*
@@ -175,16 +177,30 @@ void tseytinUtil::resolveClauses()
  * return       : void
  * Description  : The function is responsible for resolving the sampling set for gates mentioned in the .bench file
  */
-void tseytinUtil::resolveOutputIndices(string &firstAppend)
+void tseytinUtil::resolveInputIndices(string &firstAppend)
 {
-    sort(outputIndices.begin(),outputIndices.end());
+    sort(inputIndices.begin(),inputIndices.end());
 
-    for(auto num : outputIndices)
+    for(auto num : inputIndices)
     {
         firstAppend += to_string(num) + " ";
     }
 
     firstAppend += DELIMITER;
+}
+
+vector<string> tseytinUtil::resolveOutputClauses()
+{
+    vector<string> outputClauses;
+    string inter;
+    sort(outputIndices.begin(),outputIndices.end());
+
+    for(auto out : outputIndices)
+    {
+        outputClauses.push_back(to_string(out) + SPACE + DELIMITER);
+    }
+
+    return outputClauses;
 }
 
 /*
@@ -265,6 +281,7 @@ void tseytinUtil::formLookUpTable(string fileName)
             if(lookupInputOutput.find(inter[1]) == lookupInputOutput.end())
             {
                 lookupInputOutput[inter[1]] = counter;
+                inputIndices.push_back(counter);
                 ++counter;
             }
         }
