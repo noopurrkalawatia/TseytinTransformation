@@ -29,7 +29,7 @@ class fileOperationsUtil
 
 public:
     fileOperationsUtil();
-    void writeToCNFFile(vector<string> input, int noOfVariables, int noOfClauses,string firstAppend);
+    void writeToCNFFile(vector<string> input, int noOfVariables, int noOfClauses,string firstAppend,vector<string> outputClauses);
     vector<string> readContentsOfFile(string fileName);
     virtual ~fileOperationsUtil();
 };
