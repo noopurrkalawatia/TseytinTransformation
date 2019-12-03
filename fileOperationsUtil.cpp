@@ -45,9 +45,10 @@ void fileOperationsUtil::resolveFileName(string input)
  * return       : void
  * Description  : The function is responsible for writing the contents to the CNF file
  */
-void fileOperationsUtil::writeToCNFFile(vector<string> input, int noOfVariables, int noOfClauses,string firstAppend)
+void fileOperationsUtil::writeToCNFFile(vector<string> input, int noOfVariables, int noOfClauses,string firstAppend,
+        vector<string> outputClauses)
 {
-    string first = "c i ";
+    string first = "c ind ";
     string second = "p cnf " + to_string(noOfVariables) + SPACE + to_string(noOfClauses);
 
     first += firstAppend;
@@ -60,6 +61,11 @@ void fileOperationsUtil::writeToCNFFile(vector<string> input, int noOfVariables,
         myFile << second << endl;
 
         for(auto line : input)
+        {
+            myFile << line << endl;
+        }
+
+        for(auto line : outputClauses)
         {
             myFile << line << endl;
         }
