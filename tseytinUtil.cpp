@@ -50,16 +50,19 @@ void tseytinUtil::resolveClauses()
      */
     for(auto inputLine : processedBenchLines)
     {
+
         string prefix = inputLine[0];
         if(INPUT != prefix && OUTPUT != prefix)
         {
-            string gateToBeAnalysed = inputLine[2];
+            string gateToBeAnalysed = inputLine[1];
+            transform(gateToBeAnalysed.begin(), gateToBeAnalysed.end(), gateToBeAnalysed.begin(), ::toupper);
 
             if("AND" == gateToBeAnalysed)
             {
-                string a = to_string(lookupInputOutput[inputLine[3]]);
-                string b = to_string(lookupInputOutput[inputLine[4]]);
+                string a = to_string(lookupInputOutput[inputLine[2]]);
+                string b = to_string(lookupInputOutput[inputLine[3]]);
                 string c = to_string(lookupInputOutput[inputLine[0]]);
+
 
                 CNFlines.push_back("-" + a + SPACE +  "-" + b + SPACE + c + SPACE + DELIMITER);
                 CNFlines.push_back(a + SPACE +  "-" + c + SPACE + DELIMITER);
@@ -72,8 +75,8 @@ void tseytinUtil::resolveClauses()
             else if("NAND" == gateToBeAnalysed)
             {
 
-                string a = to_string(lookupInputOutput[inputLine[3]]);
-                string b = to_string(lookupInputOutput[inputLine[4]]);
+                string a = to_string(lookupInputOutput[inputLine[2]]);
+                string b = to_string(lookupInputOutput[inputLine[3]]);
                 string c = to_string(lookupInputOutput[inputLine[0]]);
 
                 CNFlines.push_back("-" + a + SPACE +  "-" + b + SPACE + "-" + c + SPACE + DELIMITER);
@@ -85,8 +88,8 @@ void tseytinUtil::resolveClauses()
 
             else if("OR" == gateToBeAnalysed)
             {
-                string a = to_string(lookupInputOutput[inputLine[3]]);
-                string b = to_string(lookupInputOutput[inputLine[4]]);
+                string a = to_string(lookupInputOutput[inputLine[2]]);
+                string b = to_string(lookupInputOutput[inputLine[3]]);
                 string c = to_string(lookupInputOutput[inputLine[0]]);
 
                 CNFlines.push_back(a + SPACE + b + SPACE + "-" + c + SPACE + DELIMITER);
@@ -98,9 +101,10 @@ void tseytinUtil::resolveClauses()
 
             else if("NOR" == gateToBeAnalysed)
             {
-                string a = to_string(lookupInputOutput[inputLine[3]]);
-                string b = to_string(lookupInputOutput[inputLine[4]]);
+                string a = to_string(lookupInputOutput[inputLine[2]]);
+                string b = to_string(lookupInputOutput[inputLine[3]]);
                 string c = to_string(lookupInputOutput[inputLine[0]]);
+
 
                 CNFlines.push_back(a + SPACE +  b + SPACE + c + SPACE + DELIMITER);
                 CNFlines.push_back("-" + a + SPACE + "-" + c + SPACE + DELIMITER);
@@ -111,9 +115,11 @@ void tseytinUtil::resolveClauses()
 
             else if("XOR" == gateToBeAnalysed)
             {
-                string a = to_string(lookupInputOutput[inputLine[3]]);
-                string b = to_string(lookupInputOutput[inputLine[4]]);
+                string a = to_string(lookupInputOutput[inputLine[2]]);
+                string b = to_string(lookupInputOutput[inputLine[3]]);
                 string c = to_string(lookupInputOutput[inputLine[0]]);
+
+
 
                 CNFlines.push_back("-" + a + SPACE + "-" + b + SPACE + "-" + c + SPACE + DELIMITER);
                 CNFlines.push_back(a + SPACE + b + SPACE + "-" + c + SPACE + DELIMITER);
@@ -126,8 +132,10 @@ void tseytinUtil::resolveClauses()
             else if("BUFF" == gateToBeAnalysed || "BUF" == gateToBeAnalysed)
             {
 
-                string a = to_string(lookupInputOutput[inputLine[3]]);
+                string a = to_string(lookupInputOutput[inputLine[2]]);
                 string c = to_string(lookupInputOutput[inputLine[0]]);
+
+
 
                 CNFlines.push_back("-" + a + SPACE + c + SPACE + DELIMITER);
                 CNFlines.push_back(a + SPACE + "-" + c + SPACE + DELIMITER);
@@ -138,8 +146,9 @@ void tseytinUtil::resolveClauses()
             else if("NOT" == gateToBeAnalysed)
             {
 
-                string a = to_string(lookupInputOutput[inputLine[3]]);
+                string a = to_string(lookupInputOutput[inputLine[2]]);
                 string c = to_string(lookupInputOutput[inputLine[0]]);
+
 
                 CNFlines.push_back("-" + a + SPACE + "-" + c + SPACE + DELIMITER);
                 CNFlines.push_back(a + SPACE + c + SPACE + DELIMITER);
@@ -150,6 +159,8 @@ void tseytinUtil::resolveClauses()
             else if ("vdd" == gateToBeAnalysed)
             {
                 string c = to_string(lookupInputOutput[inputLine[0]]);
+
+
 
                 CNFlines.push_back(c + SPACE + DELIMITER);
                 noOfClauses += 1;
@@ -212,7 +223,7 @@ vector<string> tseytinUtil::resolveOutputClauses()
 void tseytinUtil::performTseytinTransformation(string fileName)
 {
     formLookUpTable(fileName);
-    resolveClauses();
+    //resolveClauses();
 }
 
 /*
@@ -235,7 +246,15 @@ vector<string> tseytinUtil::preProcessInputLines(string &line)
     size_t found = line.find(",");
     if (found != string::npos)
     {
-        line.erase(line.begin() + found);
+        line.replace(found,1,SPACE);
+        //line.erase(line.begin() + found);
+    }
+
+    size_t found2 = line.find("=");
+    if (found2 != string::npos)
+    {
+        line.replace(found2,1,SPACE);
+        //line.erase(line.begin() + found);
     }
 
     stringstream check1(line);
@@ -307,6 +326,8 @@ void tseytinUtil::formLookUpTable(string fileName)
 
     }
 
+	cout << "*******************************************************" << endl;
+	cout << "Filename : " << fileName << " " <<inputIndices.size() << endl;
+	cout << "********************************************************" << endl;
     noOfVariables = counter - 1;
 }
-
