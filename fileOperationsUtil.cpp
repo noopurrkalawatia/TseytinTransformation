@@ -77,6 +77,7 @@ void fileOperationsUtil::writeToCNFFile(vector<string> input, int noOfVariables,
     }
 
     myFile.close();
+    cout << "Successfully converted the .bench file to .cnf file using Tseytin Transformation" << endl;
 }
 
 /*
@@ -106,9 +107,6 @@ vector<string> fileOperationsUtil::readContentsOfFile(string _fileName)
         exit(0);
     }
     myFile.close();
-    cout << "Successfully converted the .bench file to .cnf file using Tseytin Transformation" << endl;
-
-
 
     return result;
 }
